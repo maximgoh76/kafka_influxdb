@@ -1,0 +1,104 @@
+1 delete logs
+
+2 enter D:\install\apache-zookeeper-3.6.2\apache-zookeeper-3.6.2-bin\apache-zookeeper-3.6.2-bin
+cmd = >zkserver
+
+3 enter kafka and run  .\bin\windows\kafka-server-start.bat .\config\server.properties
+
+kafka-topics -zookeeper localhost:2181 -topic streams-plaintext-input -create  
+kafka-topics.bat --create --topic words_input --zookeeper localhost:2181 
+
+create topic:
+kafka-topics --zookeeper localhost:2181 --delete --topic streams-plaintext-input
+kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+
+kafka-topics.bat --create --topic words --zookeeper localhost:2181 --partitions 1 --replication-factor 1
+kafka-topics.bat --create --zookeeper localhost:2181 --replacation-factor 1 --partitions 1 --topic test
+kafka-topics.bat --create --zookeeper localhost:2181 --replacation-factor 1 --partitions 1 --topic streams-plaintext-input
+4 use kafka tool
+
+
+B. ZooKeeper Installation
+1. Go to your ZooKeeper config directory. For me its C:\zookeeper-3.4.7\conf
+
+2. Rename file “zoo_sample.cfg” to “zoo.cfg”
+
+3. Open zoo.cfg in any text editor, like Notepad; I prefer Notepad++.
+
+4. Find and edit dataDir=/tmp/zookeeper to :\zookeeper-3.4.7\data  
+
+5. Add an entry in the System Environment Variables as we did for Java.
+
+a. Add ZOOKEEPER_HOME = C:\zookeeper-3.4.7 to the System Variables.
+
+b. Edit the System Variable named “Path” and add ;%ZOOKEEPER_HOME%\bin; 
+
+6. You can change the default Zookeeper port in zoo.cfg file (Default port 2181).
+
+7. Run ZooKeeper by opening a new cmd and type zkserver.
+
+8. You will see the command prompt with some details, like the image below:
+
+
+
+C. Setting Up Kafka
+1. Go to your Kafka config directory. For me its C:\kafka_2.11-0.9.0.0\config
+
+2. Edit the file “server.properties.”
+
+3. Find and edit the line log.dirs=/tmp/kafka-logs” to “log.dir= C:\kafka_2.11-0.9.0.0\kafka-logs.
+
+4. If your ZooKeeper is running on some other machine or cluster you can edit “zookeeper.connect:2181” to your custom IP and port. For this demo, we are using the same machine so there's no need to change. Also the Kafka port and broker.id are configurable in this file. Leave other settings as is.
+
+5. Your Kafka will run on default port 9092 and connect to ZooKeeper’s default port, 2181.
+
+D. Running a Kafka Server
+Important: Please ensure that your ZooKeeper instance is up and running before starting a Kafka server.
+
+1. Go to your Kafka installation directory: C:\kafka_2.11-0.9.0.0\
+
+2. Open a command prompt here by pressing Shift + right click and choose the “Open command window here” option).
+
+3. Now type .\bin\windows\kafka-server-start.bat .\config\server.properties and press Enter.
+
+1
+.\bin\windows\kafka-server-start.bat .\config\server.properties
+Image title
+
+4. If everything went fine, your command prompt will look like this:
+
+Image title
+5. Now your Kafka Server is up and running, you can create topics to store messages. Also, we can produce or consume data from Java or Scala code or directly from the command prompt.
+
+
+
+
+INFLUX: 
+https://docs.influxdata.com/influxdb/v1.8/introduction/get-started/
+ CREATE DATABASE testDb
+ SHOW DATABASES
+ USE testDb
+ 
+ Conceptually you can think of a measurement as an SQL table, where the primary index is always time. tags and fields are effectively columns in the table. tags are indexed, and fields are not. The difference is that, with InfluxDB, you can have millions of measurements, you don’t have to define schemas up-front, and null values aren’t stored.
+ 
+ Example
+ 
+ cpu,host=serverA,region=us_west value=0.64
+payment,device=mobile,product=Notepad,method=credit billed=33,licenses=3i 1434067467100293230
+stock,symbol=AAPL bid=127.46,ask=127.48
+temperature,machine=unit42,type=assembly external=25,internal=37 1434067467000000000
+
+
+INSERT cpu,host=serverA,region=us_west value=0.64
+
+SELECT "host", "region", "value" FROM "cpu"
+> SELECT * FROM /.*/ LIMIT 1
+> SELECT * FROM "cpu_load_short"
+> SELECT * FROM "cpu_load_short" WHERE "value" > 0.9
+
+
+1 Delete from kafka after read
+2 Don't write to kafka and influx
+2 update influxDB
+
+CREATE USER admin WITH PASSWORD admin WITH ALL PRIVILEGES
