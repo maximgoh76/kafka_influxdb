@@ -1,0 +1,8 @@
+package consumer;
+
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBFactory;
+
+public class InfluxDbService {
+	InfluxDB influxDB = InfluxDBFactory.connect(databaseURL, userName, password);
+}

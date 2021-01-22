@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="java.util.Properties"/>
+    <fullyQualifiedTypeName name="java.util.Arrays"/>
+    <fullyQualifiedTypeName name="org.apache.kafka.streams.kstream.KStream"/>
+    <fullyQualifiedTypeName name="java.io.FileInputStream"/>
+    <fullyQualifiedTypeName name="java.io.IOException"/>
+    <fullyQualifiedTypeName name="org.apache.kafka.streams.StreamsConfig"/>
+    <fullyQualifiedTypeName name="org.apache.kafka.clients.consumer.ConsumerConfig"/>
+    <fullyQualifiedTypeName name="org.apache.kafka.streams.StreamsBuilder"/>
+    <fullyQualifiedTypeName name="org.apache.kafka.streams.kstream.KTable"/>
+    <fullyQualifiedTypeName name="org.apache.kafka.streams.kstream.Produced"/>
+    <fullyQualifiedTypeName name="org.apache.kafka.common.serialization.Serdes"/>
+    <fullyQualifiedTypeName name="org.apache.kafka.streams.KafkaStreams"/>
+    <fullyQualifiedTypeName name="java.util.concurrent.CountDownLatch"/>
+    <fullyQualifiedTypeName name="org.apache.kafka.clients.consumer.KafkaConsumer"/>
+    <fullyQualifiedTypeName name="org.apache.kafka.clients.consumer.ConsumerRecords"/>
+    <fullyQualifiedTypeName name="org.apache.kafka.clients.consumer.ConsumerRecord"/>
+    <fullyQualifiedTypeName name="org.apache.kafka.streams.KeyValue"/>
+    <fullyQualifiedTypeName name="org.influxdb.InfluxDB"/>
+    <fullyQualifiedTypeName name="org.influxdb.InfluxDBFactory"/>
+    <fullyQualifiedTypeName name="org.influxdb.dto.Pong"/>
+    <fullyQualifiedTypeName name="java.util.concurrent.TimeUnit"/>
+    <fullyQualifiedTypeName name="org.influxdb.dto.Point"/>
+    <fullyQualifiedTypeName name="org.influxdb.annotation.Measurement"/>
+    <fullyQualifiedTypeName name="org.influxdb.annotation.Column"/>
+    <fullyQualifiedTypeName name="java.time.Instant"/>
+    <fullyQualifiedTypeName name="org.influxdb.dto.QueryResult"/>
+    <fullyQualifiedTypeName name="org.influxdb.dto.Query"/>
+    <fullyQualifiedTypeName name="org.influxdb.impl.InfluxDBResultMapper"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+</qualifiedTypeNameHistroy>

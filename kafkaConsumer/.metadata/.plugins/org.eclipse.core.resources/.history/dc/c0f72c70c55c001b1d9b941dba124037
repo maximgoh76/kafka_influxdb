@@ -1,0 +1,23 @@
+package consumer;
+
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBFactory;
+import org.influxdb.dto.Pong;
+
+public class InfluxDbService {
+	InfluxDB influxDB = null;
+	public boolean openConnection() {
+		
+		
+	influxDB = InfluxDBFactory.connect(databaseURL, userName, password);
+	Pong response = this.influxDB.ping();
+	if (response.getVersion().equalsIgnoreCase("unknown")) {
+	    System.out.println("Error pinging server.");
+	    return false;
+	} 
+	
+	
+	return true;
+	
+	}
+}
