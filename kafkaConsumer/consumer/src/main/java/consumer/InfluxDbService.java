@@ -35,11 +35,12 @@ public class InfluxDbService {
 	
 	}
 	
-	public void writePoint(String key,int count) {
+	public void writePoint(String key,String value) {
 		Point point1 = Point.measurement("sample")
 				  .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
 				  .addField("name", "server1") 
-				  .addField("words", count)
+				  .addField("words", 0)
+				  .addField("newVal", value)
 				  .build();
 		influxDB.write(point1);
 	}

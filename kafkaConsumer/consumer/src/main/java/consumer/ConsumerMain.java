@@ -24,6 +24,8 @@ import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
+import org.apache.kafka.streams.kstream.Consumed;
+import org.apache.kafka.streams.kstream.ForeachAction;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Produced;
@@ -69,13 +71,31 @@ import java.util.concurrent.CountDownLatch;
 
 	    static void createWordCountStream(final StreamsBuilder builder) {
 	        final KStream<String, String> source = builder.stream(INPUT_TOPIC);
-
-	        final KStream<String, String> countsStream = source
-	        		 .map((key, value) -> {
+	        KTable<String, String> ipsTable = builder
+		             .table("ips", Consumed.with(Serdes.String(), Serdes.String()));
+	        
+	         source.map((key, value) -> {
 	        		        int len= value.toLowerCase(Locale.getDefault()).split(" ").length;
-	        		        influxDbService.writePoint(key,len);;
-	        		        return new KeyValue<>(key,""+len);
-	        		    });
+	        		        return new KeyValue<>(key,"words count: "+len);
+	        		    })
+	         .leftJoin(ipsTable, (topicMsg, ip) -> {
+                if (ip!=null) {
+                	return topicMsg+ " ip:" + ip;
+                }else {
+                	return topicMsg +"no ip";
+                }
+                 
+             })
+    		 .foreach(
+ 	        	    new ForeachAction<String, String>() {
+ 	        	        @Override
+ 	        	        public void apply(String key, String value) {
+ 	        	        	 influxDbService.writePoint(key,value);
+ 	        	          System.out.println(key + " => " + value);
+ 	        	        }
+ 	        	      });
+      
+
 //	            .flatMapValues(value -> {
 //	            		System.out.println("flatMapValues: value + " + value);
 //	            		return Arrays.asList(value.toLowerCase(Locale.getDefault()).split(" "));
@@ -87,7 +107,7 @@ import java.util.concurrent.CountDownLatch;
 //	            .count();
 
 	        // need to override value serde to Long type
-	        countsStream.to(OUTPUT_TOPIC, Produced.with(Serdes.String(), Serdes.String()));
+	        //countsStream.to(OUTPUT_TOPIC, Produced.with(Serdes.String(), Serdes.String()));
 	    }
 
 	    public static void main(final String[] args) throws IOException {

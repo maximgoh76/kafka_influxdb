@@ -20,5 +20,18 @@
 	    <artifactId>kafka-streams</artifactId>
 	    <version>2.7.0</version>
 	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka -->
+	<dependency>
+	    <groupId>org.apache.kafka</groupId>
+	    <artifactId>kafka_2.13</artifactId>
+	    <version>2.7.0</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/com.101tec/zkclient -->
+	<dependency>
+	    <groupId>com.101tec</groupId>
+	    <artifactId>zkclient</artifactId>
+	    <version>0.11</version>
+</dependency>
   </dependencies>
 </project>

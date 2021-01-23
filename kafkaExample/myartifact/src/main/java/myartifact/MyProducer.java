@@ -3,48 +3,29 @@ package myartifact;
 import java.io.IOException;
 //import util.properties packages
 import java.util.Properties;
-
+import java.util.Set;
 //import simple producer packages
 import org.apache.kafka.clients.producer.Producer;
-
 //import KafkaProducer packages
 import org.apache.kafka.clients.producer.KafkaProducer;
 
 //import ProducerRecord packages
 import org.apache.kafka.clients.producer.ProducerRecord;
-
-
-
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.streams.KafkaStreams;
-import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
-import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.KTable;
-import org.apache.kafka.streams.kstream.Produced;
-
+import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.ListTopicsResult;
+import org.apache.kafka.clients.admin.NewTopic;
+//import kafka.admin.AdminUtils;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Properties;
-import java.util.concurrent.CountDownLatch;
+import java.util.Collections;
 
-/**
- * Demonstrates, using the high-level KStream DSL, how to implement the WordCount program
- * that computes a simple word occurrence histogram from an input text.
- * <p>
- * In this example, the input stream reads from a topic named "streams-plaintext-input", where the values of messages
- * represent lines of text; and the histogram output is written to topic "streams-wordcount-output" where each record
- * is an updated count of a single word.
- * <p>
- * Before running this example you must create the input topic and the output topic (e.g. via
- * {@code bin/kafka-topics.sh --create ...}), and write some data to the input topic (e.g. via
- * {@code bin/kafka-console-producer.sh}). Otherwise you won't see any data arriving in the output topic.
- */
+import java.util.concurrent.TimeUnit;
+
+
+ 
 public final class MyProducer {
-
 
 
 	  static Properties getStreamsConfig(final String[] args) throws IOException {
@@ -92,63 +73,44 @@ public final class MyProducer {
 		    //  }
 		      
 //		      //Assign topicName to string variable
+			
 		      String topicName = "streams-plaintext-input";
-//		      
-//		      // create instance for properties to access producer configs   
-//		      Properties props = new Properties();
-//		      
-//		      //Assign localhost id
-//		      props.put("bootstrap.servers", "localhost:9092");
-//		      
-//		      //Set acknowledgements for producer requests.      
-//		      props.put("acks","all");
-//		      
-//		      //If the request fails, the producer can automatically retry,
-//		      props.put("retries", 0);
-//		      
-//		      //Specify buffer size in config
-//		      props.put("batch.size", 16384);
-//		      
-//		      //Reduce the no of requests less than 0   
-//		      props.put("linger.ms", 1);
-//		      
-//		      //The buffer.memory controls the total amount of memory available to the producer for buffering.   
-//		      props.put("buffer.memory", 33554432);
-//		      
-//		      props.put("key.serializer", 
-//		         "org.apache.kafka.common.serialization.StringSerializer");
-//		         
-//		      props.put("value.serializer", 
-//		         "org.apache.kafka.common.serialization.StringSerializer");
-		      
 		      final Properties props = getStreamsConfig(args);
-
-		      
+		      createTopic("ips",props);
+		 
 		      Producer<String, String> producer = new KafkaProducer
 		         <String, String>(props);
-		            
+		      
 		      for(int i = 0; i < 2; i++) {
 		    	 int  key = i % 3 ;
 		    	 
 		         producer.send(new ProducerRecord<String, String>(topicName, 
-		          "key"+  Integer.toString(key),"{"
-		            		+ " aa ss: " +  Integer.toString(i)));
-		               System.out.println("Message sent successfully");
-		              
+		          "key"+  Integer.toString(key), "word1 word2 word " +  Integer.toString(i)));
+		         producer.send(new ProducerRecord<String, String>("ips", 
+     		          "key"+  Integer.toString(key), "12.22.12.1" +  Integer.toString(i)));
+     		               
+		         System.out.println("Message sent successfully");
 		      }
 			
 		      producer.close();
-		      
-		      
-		      
-		      
-		      
-		      
-		      
+
 			System.in.read();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	
+	public static void createTopic(String topicName,Properties props) throws Exception {
+		AdminClient adminClient = AdminClient.create(props);
+		ListTopicsResult listTopics = adminClient.listTopics();
+		Set<String> names = listTopics.names().get();
+		boolean contains = names.contains(topicName);
+		if (!contains) {
+			adminClient.createTopics(Collections.singleton(new NewTopic(topicName, 1, (short)1)))
+			    .all()
+			    .get(30, TimeUnit.SECONDS);
 		}
 	}
 }
