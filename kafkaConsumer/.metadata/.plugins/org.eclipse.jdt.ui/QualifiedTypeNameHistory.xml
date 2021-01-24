@@ -29,4 +29,6 @@
     <fullyQualifiedTypeName name="org.influxdb.dto.Query"/>
     <fullyQualifiedTypeName name="org.influxdb.impl.InfluxDBResultMapper"/>
     <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="org.apache.kafka.streams.kstream.ForeachAction"/>
+    <fullyQualifiedTypeName name="org.apache.kafka.streams.kstream.Consumed"/>
 </qualifiedTypeNameHistroy>

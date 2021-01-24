@@ -91,7 +91,7 @@ import java.util.concurrent.CountDownLatch;
  	        	        @Override
  	        	        public void apply(String key, String value) {
  	        	        	 influxDbService.writePoint(key,value);
- 	        	          System.out.println(key + " => " + value);
+ 	        	        	 System.out.println(key + " => " + value);
  	        	        }
  	        	      });
       
