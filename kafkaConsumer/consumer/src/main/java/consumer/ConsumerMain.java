@@ -95,7 +95,15 @@ import java.util.concurrent.CountDownLatch;
  	        	        }
  	        	      });
       
-
+	       //.foreach(
+	        	//    new ForeachAction<String, String>() {
+	        	//        @Override
+	        	//        public void apply(String key, String value) {
+	        	//
+		        //
+	        	//        	 System.out.println(key + " => " + value);
+	        	//        }
+	        	//      }); 
 //	            .flatMapValues(value -> {
 //	            		System.out.println("flatMapValues: value + " + value);
 //	            		return Arrays.asList(value.toLowerCase(Locale.getDefault()).split(" "));
