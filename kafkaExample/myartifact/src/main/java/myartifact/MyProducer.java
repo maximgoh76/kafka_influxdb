@@ -27,6 +27,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
+import redis.clients.jedis.Jedis;
+
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.ListTopicsResult;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -118,9 +120,9 @@ public final class MyProducer {
 		      //sendUIMitigation(producer);
 		      //sendUIMitigationRelease(producer);
 		      
-		      System.out.println("true & true = " + (true & true));
-		      System.out.println("true & false = " + (true & false));
-		      System.out.println("false & false = " + (false & false));
+		      //System.out.println("true & true = " + (true & true));
+		      //System.out.println("true & false = " + (true & false));
+		      //System.out.println("false & false = " + (false & false));
 		      
 		      producer.close();
 		      //createPOJson();
@@ -129,7 +131,7 @@ public final class MyProducer {
 		      //aclCalc2.threadsTest();
 			//System.in.read();
 		     
-		      //loadRedisPoFilters()
+		      loadRedisPoFilters();
 		      
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -138,6 +140,76 @@ public final class MyProducer {
 	}
 	
 
+	private static void loadRedisPoFilters() {
+		Jedis jedis = new Jedis("localhost",6379); 
+		
+		try {
+			
+			System.out.println("REDIS Connection to server sucessfully"); 
+	      
+			int i = 0;
+			
+			while (i<500) {
+				
+				long sleep = 3000;
+				double ttl = 30; //sec
+				long now = System.currentTimeMillis(); 
+				
+				long ppsFor3Sec = 3500;
+				long bpsFor3Sec = 40000;
+				
+				if (i%2 ==0) {
+					ppsFor3Sec = 2500;
+					bpsFor3Sec = 20000;
+				}
+				
+				String key = "grpc:pofilters:Cisco-Ufi-10:6225b449733a8fa057b64789";
+				String report = "{\r\n"
+						+ "	\"Updated\": " + now +",\r\n"
+						+ "	\"PoFilters\": [\r\n"
+						+ "		{\r\n"
+						+ "			\"filter\": \"Total\",\r\n"
+						+ "			\"pps\": 3000,\r\n"
+						+ "			\"bps\": 3333\r\n"
+						+ "		},\r\n"
+						+ "		{\r\n"
+						+ "			\"filter\": \"PROTOCOL=UDP,L4_SRC_PORT=19\",\r\n"
+						+ "			\"pps\": " +ppsFor3Sec +",\r\n"
+						+ "			\"bps\": " + bpsFor3Sec +"\r\n"
+						+ "		}\r\n"
+						+ "	],\r\n"
+						+ "	\"Seconds\": 3\r\n"
+						+ "}";
+				
+				
+				
+				//6225b449733a8fa057b64789  = Max PO
+				
+				
+				
+				jedis.zadd(key, now, report);
+				jedis.zremrangeByScore(key, 0 , (double)(now - ttl * 3000 ));
+				jedis.expire(key, (long) (ttl));
+				
+				Thread.sleep(sleep);
+				
+				
+				i++;
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error: " + e.getMessage());
+		}
+		finally {
+			jedis.close();
+			System.out.println("REDIS Connection Closed"); 
+		}
+		
+		
+	
+
+	}
 
 
 
