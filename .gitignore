@@ -4,3 +4,5 @@
 /kafkaConsumer/.metadata/*
 /kafkaExample/.metadata/*
 /.metadata
+/kafkaConsumer/consumer/target/
+/kafkaConsumer/consumer/target

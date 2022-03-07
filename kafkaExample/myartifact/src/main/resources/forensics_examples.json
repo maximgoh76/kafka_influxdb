@@ -1,0 +1,52 @@
+[
+{ "router_name" : "router0",
+  "time_ts" : "2021-02-24T16:00:47.37368581Z",
+  "event_type" : "forensics_result",
+  "report" : [{"name":"DST_ADDR","total_pps":1500,"total_bps":1499925,"signature":[{"value":"3.3.1.2","pps":1500,"bps":1499925}]},{"name":"DST_ADDR_V6","total_pps":0,"total_bps":0,"signature":null},{"name":"L4_SRC_PORT","total_pps":1500,"total_bps":1499925,"signature":[{"value":"16000","pps":1500,"bps":1499925}]},{"name":"L4_DST_PORT","total_pps":1500,"total_bps":1499925,"signature":[{"value":"80","pps":1500,"bps":1499925}]},{"name":"PROTOCOL","total_pps":1540,"total_bps":1539923,"signature":[{"value":"TCP","pps":1540,"bps":1539923}]},{"name":"TCP_FLAGS","total_pps":0,"total_bps":0,"signature":null}]
+},
+{ "router_name" : "router0",
+  "time_ts" : "2021-02-24T16:00:48.37368581Z",
+  "event_type" : "forensics_result",
+  "report" : [{"name":"DST_ADDR","total_pps":1880,"total_bps":1879906,"signature":[{"value":"3.3.1.2","pps":1880,"bps":1879906}]},{"name":"DST_ADDR_V6","total_pps":0,"total_bps":0,"signature":null},{"name":"L4_SRC_PORT","total_pps":1880,"total_bps":1879906,"signature":[{"value":"16000","pps":1880,"bps":1879906}]},{"name":"L4_DST_PORT","total_pps":1880,"total_bps":1879906,"signature":[{"value":"80","pps":1880,"bps":1879906}]},{"name":"PROTOCOL","total_pps":1860,"total_bps":1859907,"signature":[{"value":"TCP","pps":1860,"bps":1859907}]},{"name":"TCP_FLAGS","total_pps":0,"total_bps":0,"signature":null}]
+},
+{ "router_name" : "router0",
+  "time_ts" : "2021-02-24T16:00:49.37368581Z",
+  "event_type" : "forensics_result",
+  "report" : [{"name":"DST_ADDR","total_pps":1952,"total_bps":1949992,"signature":[{"value":"3.3.1.2","pps":1940,"bps":1939903},{"value":"3.3.1.1","pps":12,"bps":10089}]},{"name":"DST_ADDR_V6","total_pps":0,"total_bps":0,"signature":null},{"name":"L4_SRC_PORT","total_pps":1952,"total_bps":1949992,"signature":[{"value":"16000","pps":1940,"bps":1939903},{"value":"15000","pps":12,"bps":10089}]},{"name":"L4_DST_PORT","total_pps":1992,"total_bps":1989990,"signature":[{"value":"80","pps":1992,"bps":1989990}]},{"name":"PROTOCOL","total_pps":1972,"total_bps":1969991,"signature":[{"value":"TCP","pps":1972,"bps":1969991}]},{"name":"TCP_FLAGS","total_pps":0,"total_bps":0,"signature":null}]
+},
+{ "router_name" : "router0",
+  "time_ts" : "2021-02-24T16:00:50.37368581Z",
+  "event_type" : "forensics_result",
+  "report" : [{"name":"DST_ADDR","total_pps":1940,"total_bps":1939903,"signature":[{"value":"3.3.1.2","pps":1940,"bps":1939903}]},{"name":"DST_ADDR_V6","total_pps":0,"total_bps":0,"signature":null},{"name":"L4_SRC_PORT","total_pps":1960,"total_bps":1959902,"signature":[{"value":"16000","pps":1960,"bps":1959902}]},{"name":"L4_DST_PORT","total_pps":1980,"total_bps":1979901,"signature":[{"value":"80","pps":1980,"bps":1979901}]},{"name":"PROTOCOL","total_pps":2020,"total_bps":2019899,"signature":[{"value":"TCP","pps":2020,"bps":2019899}]},{"name":"TCP_FLAGS","total_pps":0,"total_bps":0,"signature":null}]
+},
+{ "router_name" : "router0",
+  "time_ts" : "2021-02-24T16:00:51.37368581Z",
+  "event_type" : "forensics_result",
+  "report" : [{"name":"DST_ADDR","total_pps":1840,"total_bps":1839908,"signature":[{"value":"3.3.1.2","pps":1840,"bps":1839908}]},{"name":"DST_ADDR_V6","total_pps":0,"total_bps":0,"signature":null},{"name":"L4_SRC_PORT","total_pps":1820,"total_bps":1819909,"signature":[{"value":"16000","pps":1820,"bps":1819909}]},{"name":"L4_DST_PORT","total_pps":1780,"total_bps":1779911,"signature":[{"value":"80","pps":1780,"bps":1779911}]},{"name":"PROTOCOL","total_pps":1760,"total_bps":1759912,"signature":[{"value":"TCP","pps":1760,"bps":1759912}]},{"name":"TCP_FLAGS","total_pps":0,"total_bps":0,"signature":null}]
+},
+{ "router_name" : "router0",
+  "time_ts" : "2021-02-24T16:00:52.37368581Z",
+  "event_type" : "forensics_result",
+  "report" : [{"name":"DST_ADDR","total_pps":1920,"total_bps":1919904,"signature":[{"value":"3.3.1.2","pps":1920,"bps":1919904}]},{"name":"DST_ADDR_V6","total_pps":0,"total_bps":0,"signature":null},{"name":"L4_SRC_PORT","total_pps":1920,"total_bps":1919904,"signature":[{"value":"16000","pps":1920,"bps":1919904}]},{"name":"L4_DST_PORT","total_pps":1900,"total_bps":1899905,"signature":[{"value":"80","pps":1900,"bps":1899905}]},{"name":"PROTOCOL","total_pps":1900,"total_bps":1899905,"signature":[{"value":"TCP","pps":1900,"bps":1899905}]},{"name":"TCP_FLAGS","total_pps":0,"total_bps":0,"signature":null}]
+},
+{ "router_name" : "router0",
+  "time_ts" : "2021-02-24T16:00:53.37368581Z",
+  "event_type" : "forensics_result",
+  "report" : [{"name":"DST_ADDR","total_pps":1880,"total_bps":1879906,"signature":[{"value":"3.3.1.2","pps":1880,"bps":1879906}]},{"name":"DST_ADDR_V6","total_pps":0,"total_bps":0,"signature":null},{"name":"L4_SRC_PORT","total_pps":1880,"total_bps":1879906,"signature":[{"value":"16000","pps":1880,"bps":1879906}]},{"name":"L4_DST_PORT","total_pps":1900,"total_bps":1899905,"signature":[{"value":"80","pps":1900,"bps":1899905}]},{"name":"PROTOCOL","total_pps":1900,"total_bps":1899905,"signature":[{"value":"TCP","pps":1900,"bps":1899905}]},{"name":"TCP_FLAGS","total_pps":0,"total_bps":0,"signature":null}]
+},
+{ "router_name" : "router0",
+  "time_ts" : "2021-02-24T16:00:54.37368581Z",
+  "event_type" : "forensics_result",
+  "report" : [{"name":"DST_ADDR","total_pps":1960,"total_bps":1959902,"signature":[{"value":"3.3.1.2","pps":1960,"bps":1959902}]},{"name":"DST_ADDR_V6","total_pps":0,"total_bps":0,"signature":null},{"name":"L4_SRC_PORT","total_pps":1960,"total_bps":1959902,"signature":[{"value":"16000","pps":1960,"bps":1959902}]},{"name":"L4_DST_PORT","total_pps":1940,"total_bps":1939903,"signature":[{"value":"80","pps":1940,"bps":1939903}]},{"name":"PROTOCOL","total_pps":1920,"total_bps":1919904,"signature":[{"value":"TCP","pps":1920,"bps":1919904}]},{"name":"TCP_FLAGS","total_pps":0,"total_bps":0,"signature":null}]
+},
+{ "router_name" : "router0",
+  "time_ts" : "2021-02-24T16:00:55.37368581Z",
+  "event_type" : "forensics_result",
+  "report" : [{"name":"DST_ADDR","total_pps":2060,"total_bps":2059897,"signature":[{"value":"3.3.1.2","pps":2060,"bps":2059897}]},{"name":"DST_ADDR_V6","total_pps":0,"total_bps":0,"signature":null},{"name":"L4_SRC_PORT","total_pps":2120,"total_bps":2119894,"signature":[{"value":"16000","pps":2120,"bps":2119894}]},{"name":"L4_DST_PORT","total_pps":2120,"total_bps":2119894,"signature":[{"value":"80","pps":2120,"bps":2119894}]},{"name":"PROTOCOL","total_pps":2140,"total_bps":2139893,"signature":[{"value":"TCP","pps":2140,"bps":2139893}]},{"name":"TCP_FLAGS","total_pps":0,"total_bps":0,"signature":null}]
+},
+{ "router_name" : "router0",
+  "time_ts" : "2021-02-24T16:00:56.37368581Z",
+  "event_type" : "forensics_result",
+  "report" : [{"name":"DST_ADDR","total_pps":1740,"total_bps":1739913,"signature":[{"value":"3.3.1.2","pps":1740,"bps":1739913}]},{"name":"DST_ADDR_V6","total_pps":0,"total_bps":0,"signature":null},{"name":"L4_SRC_PORT","total_pps":1680,"total_bps":1679916,"signature":[{"value":"16000","pps":1680,"bps":1679916}]},{"name":"L4_DST_PORT","total_pps":1680,"total_bps":1679916,"signature":[{"value":"80","pps":1680,"bps":1679916}]},{"name":"PROTOCOL","total_pps":1660,"total_bps":1659917,"signature":[{"value":"TCP","pps":1660,"bps":1659917}]},{"name":"TCP_FLAGS","total_pps":0,"total_bps":0,"signature":null}]
+}
+]

@@ -69,10 +69,12 @@ import java.util.concurrent.CountDownLatch;
 	        return props;
 	    }
 
+	    
+	    
+	    
 	    static void createWordCountStream(final StreamsBuilder builder) {
 	        final KStream<String, String> source = builder.stream(INPUT_TOPIC);
-	        KTable<String, String> ipsTable = builder
-		             .table("ips", Consumed.with(Serdes.String(), Serdes.String()));
+	        KTable<String, String> ipsTable = builder.table("ips", Consumed.with(Serdes.String(), Serdes.String()));
 	        
 	         source.map((key, value) -> {
 	        		        int len= value.toLowerCase(Locale.getDefault()).split(" ").length;
@@ -95,6 +97,11 @@ import java.util.concurrent.CountDownLatch;
  	        	        }
  	        	      });
       
+	         
+	         
+	         
+	         
+	         
 	       //.foreach(
 	        	//    new ForeachAction<String, String>() {
 	        	//        @Override

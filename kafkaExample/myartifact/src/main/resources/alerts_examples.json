@@ -1,0 +1,5 @@
+[
+{"time_ts":"2021-02-24T16:00:08.390427123Z","router_name":"Dummy - 163","event_type":"attack_start","alert_id":"gpro1-Feb 24 16:00:08-487","src_algo":"msd2","source":"86","pps":3144,"bps":3035012,"signature":""},
+{"time_ts":"2021-02-24T16:00:08.393823219Z","router_name":"Dummy - 163","event_type":"attack_signature","alert_id":"gpro1-Feb 24 16:00:08-487","src_algo":"","source":"","pps":0,"bps":0,"signature":"TEID=0x00005ACD(1.9 MB);"},
+{"time_ts":"2021-02-24T16:00:08.393823222Z","router_name":"Dummy - 163","event_type":"attack_end","alert_id":"gpro1-Feb 24 16:00:08-487","src_algo":"","source":"","pps":0,"bps":0,"signature":""}
+]
