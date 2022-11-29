@@ -2,9 +2,12 @@ package myartifact;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 //import util.properties packages
 import java.util.Properties;
 import java.util.Random;
@@ -21,6 +24,8 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsConfig;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -32,12 +37,18 @@ import redis.clients.jedis.Jedis;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.ListTopicsResult;
 import org.apache.kafka.clients.admin.NewTopic;
+
+import java.io.BufferedWriter;
+import java.io.File;
 //import kafka.admin.AdminUtils;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.util.Collections;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import java.util.concurrent.Executors;
 
  
@@ -75,8 +86,160 @@ public final class MyProducer {
 	    }
 	
 	
-	
 	public static void main(String[] args) {
+		try {
+			String path = null;
+			if(args.length > 0){
+				path = args[0];
+			}else {
+				Path currentRelativePath = Paths.get("");
+				path = currentRelativePath.toAbsolutePath().toString();
+			}
+			
+			path = "C:\\Projects\\warroom\\application\\src\\test\\resources\\pofilters_agg\\hostsNew";
+			
+			System.out.println("Currrent path:" + path);
+			
+			final File folder = new File(path);
+			
+			for (final File fileEntry : folder.listFiles()) {
+			      convertFileToNewStructure(fileEntry); 
+			}
+			
+		} catch (Exception e) {
+			System.out.println("ERROR:" + e.getMessage());
+			e.printStackTrace();
+		}
+	
+		
+	}
+	
+	
+	
+	
+	private static void convertFileToNewStructure(File fileEntry) throws JsonSyntaxException, IOException, URISyntaxException {
+		
+		JsonObject olsJson = JsonParser
+				.parseString(new String(Files.readAllBytes(fileEntry.toPath())))
+				.getAsJsonObject();
+		
+		
+		JsonObject newJson = new JsonObject();
+		JsonArray posArray = new JsonArray();
+		newJson.add("pos", posArray);
+		
+		for (Map.Entry<String, JsonElement> entry: olsJson.entrySet()) {
+			String poId = entry.getKey();
+			JsonArray filtersArray =  entry.getValue().getAsJsonArray();
+			
+			JsonObject  newPoObject = new JsonObject();
+			newPoObject.addProperty("po", poId);
+			
+			JsonArray newFiltersArray = new JsonArray();
+			newPoObject.add("filters", newFiltersArray);
+			posArray.add(newPoObject);
+			
+			for (JsonElement oldFilterElement:filtersArray) {
+				JsonObject  oldFilterObject = oldFilterElement.getAsJsonObject();
+			
+				JsonObject  newFilterObject = findFilter(newFiltersArray,oldFilterObject.get("filter").getAsString(),oldFilterElement.getAsJsonObject());
+				
+				newFiltersArray.add(newFilterObject);
+			}
+		}
+		
+		File newfile = new File(fileEntry.getAbsolutePath().replace(".json", "NEW.json"));
+		
+		
+		Gson gson = new GsonBuilder()
+				  //.setPrettyPrinting()
+				  .create();
+		
+		//gson.toJson(newJson)
+		
+		String txt =  gson.toJson(newJson);
+		txt = txt.replace("\\u003d", "=");
+		
+		Files.writeString( newfile.toPath(), txt ,StandardCharsets.UTF_8,StandardOpenOption.CREATE);
+
+	}
+
+
+	private static JsonObject findFilter(JsonArray newFiltersArray,String curretnFilter,JsonObject oldFilterElement) {
+		
+		JsonObject newFilterJsonObject = null;
+		
+		for (JsonElement filter:newFiltersArray) {
+			if (curretnFilter.equals(filter.getAsJsonObject().get("filter").getAsString())) {
+				newFilterJsonObject = filter.getAsJsonObject();
+				break;
+			}
+		}
+		
+		if (newFilterJsonObject==null) {
+			newFilterJsonObject = new JsonObject();
+			newFilterJsonObject.addProperty("filter", curretnFilter);
+		}	
+		
+		String host = null;
+		
+		if (oldFilterElement.get("dst_ip")!=null) {
+			host = oldFilterElement.get("dst_ip").getAsString();
+		}
+		
+
+		if (host==null) {
+			newFilterJsonObject.addProperty("pps",  oldFilterElement.get("pps").getAsLong());
+			newFilterJsonObject.addProperty("bps",  oldFilterElement.get("bps").getAsLong());
+			convertSources(newFilterJsonObject,oldFilterElement);
+			
+		}else {
+			JsonObject hostObj = new JsonObject();
+			
+			
+			hostObj.addProperty("host", host);
+			hostObj.addProperty("pps",  oldFilterElement.get("pps").getAsLong());
+			hostObj.addProperty("bps",  oldFilterElement.get("bps").getAsLong());
+			convertSources(hostObj,oldFilterElement);
+			
+			JsonArray newhostsArray = null;
+			
+			if (newFilterJsonObject.get("hosts")==null) {
+				newhostsArray = new JsonArray();
+				newFilterJsonObject.add("hosts", newhostsArray);			
+			}else {
+				newhostsArray = newFilterJsonObject.get("hosts").getAsJsonArray();
+			}
+			
+			newhostsArray.add(hostObj);
+		}
+		
+
+		return newFilterJsonObject;
+	}
+
+
+	private static void convertSources(JsonObject newFilterJsonObject, JsonObject oldFilterElement) {
+		
+		if (oldFilterElement.get("Sources")==null) return;
+		
+		JsonArray sourcesArr = new JsonArray();
+		
+		for (Map.Entry<String,JsonElement> source:oldFilterElement.get("Sources").getAsJsonObject().entrySet()) {
+			JsonObject sourceObj = new JsonObject();
+			sourceObj.addProperty("router", source.getKey());
+			
+			sourceObj.addProperty("pps", source.getValue().getAsJsonObject().get("pps").getAsLong());
+			sourceObj.addProperty("bps", source.getValue().getAsJsonObject().get("bps").getAsLong());
+			
+			sourcesArr.add(sourceObj);
+		}
+		
+		newFilterJsonObject.add("sources", sourcesArr);
+	}
+
+
+	public static void mainOld(String[] args) {
 		
 		System.out.println("Hello");
 		try {
@@ -131,7 +294,9 @@ public final class MyProducer {
 		      //aclCalc2.threadsTest();
 			//System.in.read();
 		     
-		      loadRedisPoFilters();
+		      //loadRedisPoFilters();
+		      
+		      add2000Pos();
 		      
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -159,11 +324,11 @@ public final class MyProducer {
 				long bpsFor3Sec = 40000;
 				
 				if (i%2 ==0) {
-					ppsFor3Sec = 2500;
+					ppsFor3Sec = 3500;
 					bpsFor3Sec = 20000;
 				}
 				
-				String key = "grpc:pofilters:Cisco-Ufi-10:6225b449733a8fa057b64789";
+				String key = "grpc:pofilters:Cisco-Ufi-10:6229dde7a2519e8f77536709";
 				String report = "{\r\n"
 						+ "	\"Updated\": " + now +",\r\n"
 						+ "	\"PoFilters\": [\r\n"
@@ -272,6 +437,69 @@ public final class MyProducer {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	private static void add2000Pos() throws IOException {
+		//JsonObject filters = new JsonObject();
+		//filters.addProperty("router_name", "router1");
+		
+		
+		String filePath = "C:\\Users\\maximg\\Downloads\\Protected-Objects-List-05-24-22-1023_1400.json";
+		String filePathOutput = "C:\\Users\\maximg\\Downloads\\Protected-Objects-List-3000.json";
+
+		String fileStr =  Files.readAllLines(Paths.get(filePath), Charset.forName("UTF-8")).stream().collect(Collectors.joining(""));
+		
+		Gson gson = new GsonBuilder()
+		        .setLenient()
+		        .create();
+		JsonObject jsonObject = gson.fromJson(fileStr, JsonObject.class);
+		JsonArray posArray = jsonObject.get("json").getAsJsonObject().get("protectedObjects").getAsJsonArray();
+		
+		for (int i=1;i<100;i++) {
+			for (int j=1;j<27;j++) {
+				String nodeStr = "{\r\n"
+						+ "        \"sources\": [],\r\n"
+						+ "        \"destinations\": [\r\n"
+						+ "          \"16.1"+ i      + "."+ j   +".0/24\"\r\n"
+						+ "        ],\r\n"
+						+ "        \"routers\": [],\r\n"
+						+ "        \"name\": \"MAX"+i +"_"+j+"\",\r\n"
+						+ "        \"type\": \"dst\",\r\n"
+						+ "        \"mode\": \"user_confirmation\",\r\n"
+						+ "        \"bpsHighSeverity\": 50,\r\n"
+						+ "        \"bpsMediumSeverity\": 10,\r\n"
+						+ "        \"ppsHighSeverity\": 500,\r\n"
+						+ "        \"ppsMediumSeverity\": 100,\r\n"
+						+ "        \"firewall\": {\r\n"
+						+ "          \"allow\": [],\r\n"
+						+ "          \"block\": [\r\n"
+						+ "            {\r\n"
+						+ "              \"disabled\": true,\r\n"
+						+ "              \"name\": \"default\",\r\n"
+						+ "              \"isDefault\": true\r\n"
+						+ "            }\r\n"
+						+ "          ]\r\n"
+						+ "        },\r\n"
+						+ "        \"thresholdsTemplate\": \"standard\",\r\n"
+						+ "        \"mitigationGroup\": \"#All\",\r\n"
+						+ "        \"isThresholdsActive\": true\r\n"
+						+ "      }";
+				JsonObject node = JsonParser.parseString(nodeStr).getAsJsonObject();
+				posArray.add(node);
+			}
+		}
+		
+		
+		
+		
+		try {
+			Files.writeString(Path.of(filePathOutput), jsonObject.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	
 	private static void createPOJson() {
 	
