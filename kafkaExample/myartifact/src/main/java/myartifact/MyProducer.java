@@ -103,7 +103,8 @@ public final class MyProducer {
 			final File folder = new File(path);
 			
 			for (final File fileEntry : folder.listFiles()) {
-			      convertFileToNewStructure(fileEntry); 
+				formatFile(fileEntry);
+			      //convertFileToNewStructure(fileEntry); 
 			}
 			
 		} catch (Exception e) {
@@ -114,7 +115,84 @@ public final class MyProducer {
 		
 	}
 	
+	private static void formatFile(File fileEntry) throws JsonSyntaxException, IOException, URISyntaxException {
+		
+		JsonObject oldJson = JsonParser
+				.parseString(new String(Files.readAllBytes(fileEntry.toPath())))
+				.getAsJsonObject();
+		
+		
+		JsonObject newJson = new JsonObject();
+		JsonArray posArray = null;
+		newJson.add("pos", posArray);
+		
+		boolean isFirstPO = true;
+		
+		
+		File newfile = new File(fileEntry.getAbsolutePath().replace(".json", "NEW.json"));
+		Files.writeString( newfile.toPath(), "{\n \"pos\":[" ,StandardCharsets.UTF_8,StandardOpenOption.CREATE);
+		
+		
+		posArray = oldJson.get("pos").getAsJsonArray();
+		
+		for (JsonElement poObj: posArray) {
+			
+			JsonObject po = poObj.getAsJsonObject();
+			boolean isFirstFilter = true;
+			
+			JsonArray filtersArray =  po.get("filters").getAsJsonArray();
+			
+			String  poId = po.get("po").getAsString();
+			
+			if (!isFirstPO) {
+				writeLine(",",newfile);
+			}
+			isFirstPO = false;
+			
+			writeLine( "\n\t{\"po\":\"" + poId + "\",", newfile);
+			writeLine( "\"filters\":[", newfile);
+			for (JsonElement filter:filtersArray) {
+				
+				if (!isFirstFilter) {
+					writeLine(",",newfile);
+				}
+				isFirstFilter = false;
+				
+				writeLine(filter, newfile);
+			}
+			
+			writeLine( "\n\t]}", newfile);
+		}
+		
+		
+		Files.writeString( newfile.toPath(), "\n]}" ,StandardCharsets.UTF_8,StandardOpenOption.APPEND);
+		
+		
+		
+		//gson.toJson(newJson)
+		
+
+		
+
+	}
 	
+	private static Gson gson = new GsonBuilder()
+			  //.setPrettyPrinting()
+			  .create();
+	
+	private static void writeLine (Object line,File newfile ) throws IOException {
+		
+		
+		String txt = null;
+		if (line instanceof String) {
+			txt = (String)line;
+		}else {
+			txt = gson.toJson(line);
+			txt = "\n\t\t\t" + txt.replace("\\u003d", "=");
+		}
+		
+		Files.writeString( newfile.toPath(), txt ,StandardCharsets.UTF_8,StandardOpenOption.APPEND);
+	}
 	
 	
 	private static void convertFileToNewStructure(File fileEntry) throws JsonSyntaxException, IOException, URISyntaxException {
