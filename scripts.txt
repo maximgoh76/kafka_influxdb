@@ -120,4 +120,7 @@ SELECT "host", "region", "value" FROM "cpu"
 CREATE USER admin WITH PASSWORD admin WITH ALL PRIVILEGES
 
 
----DDDDDDDDDDDDDDDDDDDDDDDDDD
+
+
+
+-----------------------NEW DATA--------
