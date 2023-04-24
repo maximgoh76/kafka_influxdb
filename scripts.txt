@@ -118,3 +118,6 @@ SELECT "host", "region", "value" FROM "cpu"
 2 update influxDB
 
 CREATE USER admin WITH PASSWORD admin WITH ALL PRIVILEGES
+
+
+---DDDDDDDDDDDDDDDDDDDDDDDDDD
